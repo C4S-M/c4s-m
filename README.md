@@ -1,6 +1,6 @@
 ## Hi there 👋
 
-
+Don't take this site serious. This is an example how you shouldn't structure your code 
 **C4S-M/c4s-m** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
 Here are some ideas to get you started:
