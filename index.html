@@ -4,95 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactieve 3D Achtergrond met Terminal</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden; /* Voorkomt scrollbars */
-            background-color: #000; /* Zwarte achtergrond voor de zekerheid */
-            color: #0f0; /* Standaard tekstkleur groen */
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        #vanta-bg {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0; /* Achter de content */
-        }
-
-        .page-container {
-            position: relative;
-            z-index: 1; /* Voor de 3D achtergrond */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-
-        .welcome-message {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
-        }
-
-        .terminal-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #terminal {
-            width: 600px;
-            height: 350px;
-            background-color: rgba(0, 0, 0, 0.75); /* Iets doorzichtig zwart */
-            border: 1px solid #0f0;
-            border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
-            padding: 20px;
-            overflow: hidden; /* Verbergt tekst die buiten de box valt */
-            box-sizing: border-box;
-            text-align: left; 
-        }
-
-        .line {
-            white-space: pre; /* Behoudt spaties en enters */
-            margin: 0;
-            height: 1.2em; /* Zorgt voor consistente regelhoogte */
-        }
-        
-        .cursor {
-            display: inline-block;
-            background-color: #0f0;
-            width: 10px;
-            height: 1.2em;
-            animation: blink 1s step-end infinite;
-        }
-        
-        .social-links {
-            margin-top: 20px;
-        }
-
-        .social-links a {
-            color: #0f0;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 1.4rem;
-            transition: text-shadow 0.3s ease;
-        }
-
-        .social-links a:hover {
-            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
-        }
-
-        @keyframes blink {
-            from, to { background-color: transparent }
-            50% { background-color: #0f0; }
-        }
-</style>
+    <link rel="stylesheet" href="syle.css">  
 </head>
 <body>
 
@@ -103,6 +15,7 @@
         <div class="welcome-message">
             <p>// WELKOM //</p>
         </div>
+        
 
         <div class="terminal-container">
             <div id="terminal"></div>
@@ -118,139 +31,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
-    <script>
-        // Vanta.js 3D achtergrond initialisatie
-        VANTA.WAVES({
-          el: "#vanta-bg",
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          minHeight: 200.00,
-          minWidth: 200.00,
-          scale: 1.00,
-          scaleMobile: 1.00,
-          color: 0x5a5a5a, // Een grijze kleur voor een "chrome"-achtig gevoel
-          shininess: 50.00, // Verhoogd voor een meer metaalachtige glans
-          waveHeight: 15.00,
-          waveSpeed: 0.50,
-          zoom: 0.75
-        });
-    </script>
-    
-    <script>
-        const terminal = document.getElementById('terminal');
-        const user = 'cas@kali';
-
-        // Commando's uitgebreid met een 'output' array.
-        const commands = [
-            { 
-                cmd: 'whois cas', 
-                output: [
-                    'Name: Cas',
-                    'Status: Online',
-                    'Location: Classified',
-                    'Skills: [ "Security", "Systems", "Coding" ]',
-                    'Check LinkedIn For more skills & info'
-                ],
-                delay: 2000 
-            },
-            { 
-                cmd: 'inject target --payload', 
-                output: [
-                    'Injecting payload...',
-                    'Access granted.',
-                    '// Ready for next command.'
-                ], 
-                delay: 2500 
-            },
-            {
-                cmd: 'display --logo',
-                output: [
-                    '      ____    _    ____  __  __               ',
-                    '     / ___|  / \\  / ___||  \\/  |              ',
-                    '     | |    / _ \\ \\___ \\| |\\/| |              ',
-                    '     | |___/ ___ \\ ___) | |  | |_             ',
-                    '      \\____/_/   \\_\\____/|_|  |_(_)   _   _    ',
-                    '     |  _ \\ _ __ ___   __| |_  _  ___| |_(_) ___  _ __  ___',
-                    '     | |_) | \'__/ _ \\ / _` | | | |/ __| __| |/ _ \\| \'_ \\/ __|',
-                    '     |  __/| | | (_) | (_| | |_| | (__| |_| | (_) | | | \\__ \\',
-                    '     |_|   |_|  \\___/ \\__,_|\\__,_|\\___|\\__|_|\\___/|_| |_|___/',
-                    ' '
-                ],
-                delay: 3000
-            }
-        ];
-
-        let commandIndex = 0;
-
-        function typeLine(lineElement, text, callback) {
-            let i = 0;
-            const intervalId = setInterval(() => {
-                lineElement.textContent = text.substring(0, i);
-                if (i === text.length) {
-                    clearInterval(intervalId);
-                    if (callback) callback();
-                }
-                i++;
-            }, 30); // Snelheid van het typen
-        }
-
-        function handleCommand() {
-            if (commandIndex >= commands.length) {
-                // Als alle commando's zijn geweest, reset en begin opnieuw
-                setTimeout(() => {
-                    terminal.innerHTML = '';
-                    commandIndex = 0;
-                    handleCommand();
-                }, 2000);
-                return;
-            }
-
-            const currentLine = commands[commandIndex];
-            const fullCommand = `${user}:~$ ${currentLine.cmd}`;
-            
-            const cmdElement = document.createElement('p');
-            cmdElement.className = 'line';
-            terminal.appendChild(cmdElement);
-
-            // Typ het commando
-            typeLine(cmdElement, fullCommand, () => {
-                // Voeg cursor toe na het typen van het commando
-                const cursor = document.createElement('span');
-                cursor.className = 'cursor';
-                cmdElement.appendChild(cursor);
-
-                // Wacht even, verwijder cursor en toon output
-                setTimeout(() => {
-                    cmdElement.removeChild(cursor);
-                    
-                    // Toon de output regel voor regel
-                    let outputIndex = 0;
-                    function showOutput() {
-                        if (outputIndex < currentLine.output.length) {
-                            const outputElement = document.createElement('p');
-                            outputElement.className = 'line';
-                            outputElement.textContent = currentLine.output[outputIndex];
-                            terminal.appendChild(outputElement);
-                            outputIndex++;
-                            // Zorg dat de terminal naar beneden scrollt
-                            terminal.scrollTop = terminal.scrollHeight; 
-                            showOutput(); // Direct de volgende regel (of met een kleine delay)
-                        } else {
-                            // Klaar met output, ga naar het volgende commando
-                            commandIndex++;
-                            setTimeout(handleCommand, 500);
-                        }
-                    }
-                    showOutput();
-                    
-                }, currentLine.delay);
-            });
-        }
-
-        // Start de animatie
-        handleCommand();
-    </script>
+    <script src="background.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
