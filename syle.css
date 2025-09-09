@@ -1,0 +1,92 @@
+        body {
+            margin: 0;
+            overflow: hidden; /* Voorkomt scrollbars */
+            background-color: #000; /* Zwarte achtergrond voor de zekerheid */
+            color: #0f0; /* Standaard tekstkleur groen */
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        #vanta-bg {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Achter de content */
+        }
+
+        .page-container {
+            position: relative;
+            z-index: 1; /* Voor de 3D achtergrond */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .welcome-message {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-shadow: 0 0 5px #000, 0 0 10px #0f0;
+            color: #000000;
+        }
+
+        .terminal-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #terminal {
+            width: 600px;
+            height: 350px;
+            background-color: rgba(0, 0, 0, 0.75); /* Iets doorzichtig zwart */
+            border: 1px solid #0f0;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            padding: 20px;
+            overflow: hidden; /* Verbergt tekst die buiten de box valt */
+            box-sizing: border-box;
+            text-align: left; 
+        }
+
+        .line {
+            white-space: pre; /* Behoudt spaties en enters */
+            margin: 0;
+            height: 1.2em; /* Zorgt voor consistente regelhoogte */
+        }
+        
+        .cursor {
+            display: inline-block;
+            background-color: #0f0;
+            width: 10px;
+            height: 1.2em;
+            animation: blink 1s step-end infinite;
+        }
+        
+        .social-links {
+            margin-top: 20px;
+            color: #000000;
+        }
+
+        .social-links a {
+            text-decoration: none;
+            background-color: #000000;
+            margin: 4px;
+            font-size: 1.4rem;
+            transition: text-shadow 0.3s ease;
+            color: #0f0; 
+            border-style: solid;
+            border-color: #0f0 ;
+        }
+
+        a:hover {
+            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+        }
+
+        @keyframes blink {
+            from, to { background-color: transparent }
+            50% { background-color: #0f0; }
+        }
