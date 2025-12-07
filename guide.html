@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juice Approved by Cas 🧃</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        /* --- Simpele, strakke styling (Dark Mode) --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ff9f43; /* Een accentkleur */
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: #fff; }
+
+        /* --- De Cards --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #2d2d2d;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #444;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #ff9f43;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .price {
+            background: #444;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
+        .tags {
+            font-size: 0.8rem;
+            color: #ff9f43;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .opinion {
+            font-style: italic;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .map-btn {
+            display: inline-block;
+            background-color: #ff9f43;
+            color: #1a1a1a;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .map-btn:hover { background-color: #ffb875; }
+
+        /* Loading state */
+        #loading { text-align: center; margin-top: 50px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <a href="index.html" class="back-link">← Terug naar Home</a>
+        <h1>Juice Approved by Cas 🧃</h1>
+        <p>De gecureerde lijst van plekken die de moeite waard zijn.</p>
+    </header>
+
+    <div id="loading">Data ophalen uit de cloud...</div>
+    <div id="content" class="grid"></div>
+</div>
+
+<script>
+    // --- CONFIGURATIE ---
+    // PLAK HIERONDER JOUW GOOGLE SHEETS CSV LINK (tussen de aanhalingstekens)
+    const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrsuNkhnbrAxEpRjlLPV7lauwhniNmSWyiY_eotRL3EcjMm2qt5QsxcWpNvj_7JCrYxKxV9YgHdkkR/pub?gid=0&single=true&output=csv"; 
+
+    // Functie om de data op te halen en te tonen
+    function init() {
+        Papa.parse(sheetUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                const data = results.data;
+                const container = document.getElementById('content');
+                document.getElementById('loading').style.display = 'none';
+
+                data.forEach(item => {
+                    // Check of de regel wel een naam heeft (om lege regels te voorkomen)
+                    if(!item.Naam) return;
+
+                    // HTML genereren voor elke kaart
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <span class="tags">${item.Categorie} • ${item.Type}</span>
+                        <div class="card-header">
+                            <h3 class="name">${item.Naam}</h3>
+                            <span class="price">${item.Prijs}</span>
+                        </div>
+                        <p class="opinion">"${item.Mening}"</p>
+                        <a href="${item.MapsLink}" target="_blank" class="map-btn">📍 Google Maps</a>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        });
+    }
+
+    // Start het script
+    init();
+</script>
+
+</body>
+</html>
