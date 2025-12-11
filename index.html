@@ -4,36 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Cas M.">
-    <meta name="description" content="Static site to show off.">
-    <title>whois cas</title>
-    <link rel="stylesheet" href="syle.css">  
+    <meta name="description" content="Portfolio & Terminal van Cas. Security, Coding & Juice.">
+    <title>whois cas | Terminal</title>
+    <link rel="stylesheet" href="style.css">  
 </head>
 <body>
 
-
-
     <div id="vanta-bg"></div>
 
-    <div class="page-container">
+    <header role="banner">
+        <a href="index.html" class="logo">root@cas:~$</a>
+        <nav role="navigation">
+            <a href="index.html">/Home</a>
+            <a href="guide.html">/Guide</a>
+        </nav>
+    </header>
+
+    <main class="page-container">
         
         <div class="welcome-message">
-            <p>// WELKOM //</p>
+            <p>&lt; SYSTEM READY /&gt;</p>
         </div>
         
-
         <div class="terminal-container">
-            <div id="terminal"></div>
+            <div id="terminal" aria-live="polite" aria-label="Terminal Output"></div>
         </div>
         
         <div class="social-links">
-            <a href="https://www.identityguard.com/news/youve-been-phished" target="_blank">[ GitHub ]</a>
-            <a href="https://www.identityguard.com/news/youve-been-phished" target="_blank">[ LinkedIn ]</a>
-            <a href="https://www.identityguard.com/news/youve-been-phished" target="_blank">[ Twitter ]</a>
-            <a href="guide.html" class="juice-btn">🧃 Juice Approved by Cas</a>
-
+            <a href="https://github.com/C4S-M" target="_blank" aria-label="GitHub Profiel">[ GitHub ]</a>
+            <a href="#" target="_blank" aria-label="LinkedIn Profiel">[ LinkedIn ]</a>
+            <a href="#" target="_blank" aria-label="Twitter Profiel">[ Twitter ]</a>
         </div>
 
-    </div>
+        <a href="guide.html" class="juice-btn">
+            ./run_juice_guide.exe 🧃
+        </a>
+
+    </main>
+
+    <footer role="contentinfo">
+        <p>User: cas@kali | IP: 127.0.0.1 | &copy; 2025 Cas M.</p>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
@@ -42,6 +53,3 @@
 
 </body>
 </html>
-
-
-
