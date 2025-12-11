@@ -1,111 +1,195 @@
-        body {
-            margin: 0;
-            overflow: hidden; /* Voorkomt scrollbars */
-            background-color: #000; /* Zwarte achtergrond voor de zekerheid */
-            color: #0f0; /* Standaard tekstkleur groen */
-            font-family: 'Courier New', Courier, monospace;
-        }
+:root {
+    --hacker-green: #0f0;
+    --bg-black: #000;
+    --terminal-bg: rgba(0, 0, 0, 0.85);
+    --font-mono: 'Courier New', Courier, monospace;
+}
 
-        #vanta-bg {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0; /* Achter de content */
-        }
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-black);
+    color: var(--hacker-green);
+    font-family: var(--font-mono);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden; /* Alleen horizontaal scrollen voorkomen */
+}
 
-        .page-container {
-            position: relative;
-            z-index: 1; /* Voor de 3D achtergrond */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
+/* --- VANTA ACHTERGROND --- */
+#vanta-bg {
+    position: fixed; /* Fixed zorgt dat hij niet meescrollt */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Helemaal achteraan */
+    pointer-events: none; /* Zodat je er doorheen kunt klikken/scrollen */
+}
 
-        .welcome-message {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            text-shadow: 0 0 5px #000, 0 0 10px #0f0;
-            color: #000000;
-        }
+/* --- HEADER --- */
+header {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-bottom: 1px solid var(--hacker-green);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    z-index: 10;
+    position: relative;
+}
 
-        .terminal-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.logo {
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px var(--hacker-green);
+    text-decoration: none;
+    color: var(--hacker-green);
+}
 
-        #terminal {
-            width: 600px;
-            height: 350px;
-            background-color: rgba(0, 0, 0, 0.75); /* Iets doorzichtig zwart */
-            border: 1px solid #0f0;
-            border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
-            padding: 20px;
-            overflow: hidden; /* Verbergt tekst die buiten de box valt */
-            box-sizing: border-box;
-            text-align: left; 
-        }
+nav a {
+    color: var(--hacker-green);
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
 
-        .line {
-            white-space: pre; /* Behoudt spaties en enters */
-            margin: 0;
-            height: 1.2em; /* Zorgt voor consistente regelhoogte */
-        }
-        
-        .cursor {
-            display: inline-block;
-            background-color: #0f0;
-            width: 10px;
-            height: 1.2em;
-            animation: blink 1s step-end infinite;
-        }
-        
-        .social-links {
-            margin-top: 20px;
-            color: #000000;
-        }
+nav a:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 8px var(--hacker-green);
+}
 
-        .social-links a {
-            text-decoration: none;
-            background-color: #000000;
-            margin: 4px;
-            font-size: 1.4rem;
-            transition: text-shadow 0.3s ease;
-            color: #0f0; 
-            border-style: solid;
-            border-color: #0f0 ;
-        }
+/* --- MAIN CONTENT --- */
+.page-container {
+    flex: 1; /* Neemt resterende ruimte in */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
+}
 
-        a:hover {
-            text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
-        }
+.welcome-message {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-shadow: 0 0 5px #000, 0 0 10px var(--hacker-green);
+    color: #000; /* Zwart tegen lichte Vanta waves, of groen als Vanta donker is */
+    background-color: rgba(0,255,0, 0.1); /* Lichte gloed achter tekst voor leesbaarheid */
+    padding: 5px 10px;
+}
 
-        @keyframes blink {
-            from, to { background-color: transparent }
-            50% { background-color: #0f0; }
-        }
+/* --- TERMINAL (Responsive gemaakt) --- */
+.terminal-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
-        .juice-btn {
-        display: inline-block;
-        padding: 12px 24px;
-        background-color: transparent;
-        border: 2px solid #ff9f43; /* Oranje rand */
-        color: #ff9f43;
-        text-decoration: none;
-        font-weight: bold;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        margin-top: 20px;
-        }
+#terminal {
+    width: 100%;
+    max-width: 650px; /* Niet breder dan dit op desktop */
+    height: 400px;    /* Vaste hoogte behouden voor het script */
+    background-color: var(--terminal-bg);
+    border: 1px solid var(--hacker-green);
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    padding: 15px;
+    overflow-y: auto; /* Scrollen als tekst te lang is */
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 1rem; /* Leesbaar houden */
+}
 
-        .juice-btn:hover {
-        background-color: #ff9f43;
-        color: #1a1a1a; /* Tekst wordt donker bij hover */
-        transform: scale(1.05);
-        }
+/* Mobiele aanpassing terminal */
+@media (max-width: 600px) {
+    #terminal {
+        height: 300px;
+        font-size: 0.9rem;
+    }
+    .welcome-message { font-size: 1.2rem; }
+    
+    header {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+.line {
+    white-space: pre-wrap; /* Zorgt dat lange regels op mobiel afbreken */
+    margin: 0;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.cursor {
+    display: inline-block;
+    background-color: var(--hacker-green);
+    width: 8px;
+    height: 1em;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes blink {
+    from, to { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* --- KNOPPEN & LINKS --- */
+.social-links {
+    margin-top: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-links a, .juice-btn {
+    text-decoration: none;
+    background-color: #000;
+    color: var(--hacker-green);
+    border: 1px solid var(--hacker-green);
+    padding: 10px 15px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
+}
+
+.social-links a:hover, .juice-btn:hover {
+    background-color: rgba(0, 255, 0, 0.2);
+    box-shadow: 0 0 15px var(--hacker-green);
+    transform: translateY(-2px);
+}
+
+/* Specifieke styling voor de Juice knop om op te vallen */
+.juice-btn {
+    margin-top: 20px;
+    border-color: #ff9f43; /* Oranje accent behouden */
+    color: #ff9f43;
+    font-weight: bold;
+}
+
+.juice-btn:hover {
+    background-color: rgba(255, 159, 67, 0.2);
+    box-shadow: 0 0 15px #ff9f43;
+    color: #ff9f43;
+}
+
+/* --- FOOTER --- */
+footer {
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-top: 1px solid var(--hacker-green);
+    text-align: center;
+    font-size: 0.8rem;
+    color: #666;
+    z-index: 10;
+}
