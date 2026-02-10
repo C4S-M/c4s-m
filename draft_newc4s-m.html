@@ -49,6 +49,26 @@
             align-items: center;
         }
 
+        /* WARNING BANNER */
+        .warning-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, rgba(100,0,0,0.9), rgba(255,0,0,0.8), rgba(100,0,0,0.9));
+            color: #fff;
+            text-align: center;
+            padding: 6px;
+            font-size: 0.75rem;
+            z-index: 200;
+            border-bottom: 1px solid #ff5f56;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            text-shadow: 0 0 2px black;
+        }
+
         /* Layout Grid */
         .dashboard-container {
             display: grid;
@@ -59,6 +79,8 @@
             max-width: 1600px;
             position: relative;
             z-index: 2;
+            margin-bottom: var(--footer-height);
+            margin-top: 20px; /* Space for banner */
         }
 
         /* Algemene Panel Styling */
@@ -337,6 +359,8 @@
                 height: auto;
                 overflow-y: auto;
                 display: block;
+                margin-top: 30px; /* More space for banner on mobile */
+
             }
             body {
                 overflow-y: auto;
@@ -356,6 +380,10 @@
     </style>
 </head>
 <body>
+
+    <div class="warning-banner">
+        ⚠ SYSTEM WARNING: Inhoud is nog in bèta. Sommige skills worden nog aangescherpt (maar alles is mogelijk met de juiste effort en doorzetting) ⚠
+    </div>
 
     <div class="scanline"></div>
     <div class="flicker"></div>
@@ -525,14 +553,16 @@
         };
 
         const projects = {
-            "c4s": "C4S-M Framework:\nEen modulaire toolkit voor security auditing.\nStatus: Active | Tech: Python, Bash",
+            "c4s": "C4S-M Framework:\nEen modulaire toolkit voor security auditing.\nStatus: In queue | Tech: Python, Bash",
             "whoami": "WhoAmI Website:\nDeze website die je nu ziet. Gebouwd met HTML5, CSS Grid en Vanilla JS.\nStatus: Live",
-            "bot": "Discord SecBot:\nEen bot die phishing links detecteert en verwijdert.\nStatus: Maintenance"
+            "TIP":"Threat Intelligence Platform:\nEen platform dat threat intel verzameld van verschillende gecontrolleerde bronnen\nStatus: Live ",
+            "bot": "Discord SecBot:\nEen bot die phishing links detecteert en verwijdert.\nStatus: Maintenance",
+            "AutoSerre": "Automatische serre :\nDoor gebruik van een ESP32 en vocht\nStatus: Closed"
         };
 
         const blogPosts = {
             "1": "TITLE: Linux Hardening 101\nDATUM: 10-02-2026\n\nDe basis van elke server begint bij beveiliging. Schakel root login uit, gebruik SSH keys, en installeer fail2ban...",
-            "2": "TITLE: Waarom VIM?\nDATUM: 02-01-2026\n\nAls je eenmaal de sneltoetsen kent, wil je nooit meer terug naar VS Code (grapje, misschien wel). Maar op een headless server is VIM koning."
+            "2": "TITLE: Waarom nano?\nDATUM: 02-01-2026\n\nte lui om VIM te gebruiken en nano is veel gebruiksvriendelijker naar mijn mening. Als je eenmaal de sneltoetsen kent, wil je nooit meer terug naar VS Code (grapje, misschien wel). Maar op een headless server is nano wel handig, sorry VIM experts."
         };
 
         const services = {
