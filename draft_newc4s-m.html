@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>root@matthca:~</title>
+    <meta name="description" content="Matthca Portfolio & Services">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Kleurenpalet - Cyberpunk / Matrix Minimalist */
+            --bg-color: #050505;
+            --panel-bg: rgba(15, 15, 20, 0.85);
+            --border-color: #333;
+            --accent-color: #00ff41; /* Classic Terminal Green */
+            --secondary-accent: #CCFF00; /* Neo yellow */
+            --text-color: #e0e0e0;
+            --dim-text: #888;
+            --font-main: 'Fira Code', monospace;
+            --scanline-color: rgba(0, 0, 0, 0.5);
+            --glass-blur: 10px;
+            --footer-height: 30px;
+
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) var(--bg-color);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image:
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            color: var(--text-color);
+            font-family: var(--font-main);
+            height: 100vh;
+            overflow: hidden; /* Prevent body scroll, layout handles it */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Layout Grid */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 20px;
+            width: 95vw;
+            height: 90vh;
+            max-width: 1600px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Algemene Panel Styling */
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            backdrop-filter: blur(var(--glass-blur));
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: var(--dim-text);
+        }
+
+        .panel-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--dim-text);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h2, h3 { font-weight: 600; color: var(--secondary-accent); margin-bottom: 0.5rem;}
+        p { font-size: 0.9rem; line-height: 1.5; color: #ccc; margin-bottom: 1rem; }
+        ul { list-style: none; }
+
+        /* Links & Buttons */
+        a, .cmd-trigger {
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+            display: inline-block;
+        }
+
+        a:hover, .cmd-trigger:hover {
+            color: var(--accent-color);
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
+        /* --- LEFT SIDEBAR (Services & Links) --- */
+        .sidebar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .service-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px dashed var(--border-color);
+            border-radius: 4px;
+        }
+
+        .service-item:hover {
+            border-color: var(--secondary-accent);
+            background: rgba(0, 243, 255, 0.05);
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .link-btn {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            text-align: center;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+        }
+        .link-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* --- CENTER (Terminal) --- */
+        .terminal-container {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--dim-text); /* Iets fellere rand voor main focus */
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .terminal-header {
+            background: #1a1a1a;
+            padding: 8px 15px;
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+        .title-bar-text { margin-left: auto; margin-right: auto; font-size: 0.8rem; color: #888; }
+
+        .terminal-output {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+        }
+
+        .output-line { margin-bottom: 5px; word-wrap: break-word; }
+        .command-line { color: var(--accent-color); font-weight: bold; margin-top: 10px;}
+        .response-text { color: var(--text-color); white-space: pre-wrap; }
+        .error-text { color: #ff5f56; }
+        .info-text { color: var(--secondary-accent); }
+
+        .input-area {
+            display: flex;
+            padding: 15px 20px;
+            background: #0a0a0a;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .prompt {
+            color: var(--accent-color);
+            margin-right: 10px;
+            user-select: none;
+        }
+
+        #cmd-input {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            flex-grow: 1;
+            outline: none;
+            caret-color: var(--accent-color);
+        }
+
+        /* --- RIGHT SIDEBAR (Projects & Skills) --- */
+        .sidebar-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .skill-bar {
+            margin-bottom: 10px;
+        }
+        .skill-name {
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+        .progress-bg {
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary-accent);
+            width: 0%; /* JS animate */
+            transition: width 1s ease-in-out;
+        }
+
+        .project-mini {
+            border-left: 2px solid var(--dim-text);
+            padding-left: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .project-mini:hover {
+            border-left-color: var(--accent-color);
+            background: linear-gradient(90deg, rgba(0,255,65,0.05), transparent);
+        }
+        .project-mini h4 { color: #fff; font-size: 0.9rem; }
+        .project-mini span { font-size: 0.75rem; color: var(--dim-text); }
+
+                /* --- STATUS BAR (Footer) --- */
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--footer-height);
+            background: #0a0a0a;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 0.75rem;
+            color: var(--dim-text);
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-left, .status-right {
+            display: flex;
+            gap: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-ai-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: var(--dim-text);
+            border-radius: 50%;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .ai-active {
+            background-color: var(--ai-accent);
+            box-shadow: 0 0 8px var(--ai-accent);
+            animation: pulse-purple 0.5s infinite alternate;
+        }
+
+        /* CRT Effects */
+        .scanline {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .flicker {
+            animation: flicker 0.15s infinite;
+            pointer-events: none;
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0, 255, 65, 0.01);
+            opacity: 0.1;
+            z-index: 11;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.02; }
+            50% { opacity: 0.05; }
+            100% { opacity: 0.02; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 500px auto;
+                height: auto;
+                overflow-y: auto;
+                display: block;
+            }
+            body {
+                overflow-y: auto;
+                height: auto;
+                padding: 20px 0;
+            }
+            .sidebar-left, .terminal-container, .sidebar-right {
+                width: 95%;
+                margin: 0 auto 20px auto;
+                height: auto;
+            }
+            .terminal-container {
+                height: 60vh;
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanline"></div>
+    <div class="flicker"></div>
+
+    <div class="dashboard-container">
+
+        <!-- LINKS: Services & Contact -->
+        <aside class="sidebar-left">
+            <div class="panel">
+                <div class="panel-header">
+                    <span>Services_Daemon</span>
+                    <span style="color:var(--accent-color)">● RUNNING</span>
+                </div>
+                <div class="service-item cmd-trigger" onclick="runCommand('service webdev')">
+                    <h3>Web Development</h3>
+                    <p>Full-stack oplossingen, van landing pages tot complexe webapps.</p>
+                </div>
+                <div class="service-item cmd-trigger" onclick="runCommand('service security')">
+                    <h3>Security Audit</h3>
+                    <p>Basis pentesting en vulnerability scans voor uw infrastructuur.</p>
+                </div>
+                <div class="service-item cmd-trigger" onclick="runCommand('service automation')">
+                    <h3>Automatisatie</h3>
+                    <p>Python scripts en bots om saaie taken te elimineren.</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span>Netwerk_Hub</span>
+                </div>
+                <div class="link-grid">
+                    <a href="https://github.com/C4S-M" target="_blank" class="link-btn">GitHub</a>
+                    <a href="#" class="link-btn cmd-trigger" onclick="runCommand('contact')">Email</a>
+                    <a href="#" class="link-btn cmd-trigger" onclick="runCommand('socials')">LinkedIn</a>
+                    <a href="#" class="link-btn cmd-trigger" onclick="runCommand('help')">Help</a>
+                </div>
+            </div>
+
+            <!-- Nieuw: Blog Widget -->
+            <div class="panel" style="flex-grow:1">
+                <div class="panel-header">
+                    <span>/var/log/blog</span>
+                </div>
+                <div style="font-size:0.8rem; color:var(--dim-text)">
+                    <div class="cmd-trigger" onclick="runCommand('blog read 1')" style="margin-bottom:10px; cursor:pointer;">
+                        <span style="color:var(--secondary-accent)">></span> Linux Hardening 101<br>
+                        <span style="font-size:0.7rem">10-02-2026</span>
+                    </div>
+                    <div class="cmd-trigger" onclick="runCommand('blog read 2')" style="cursor:pointer;">
+                        <span style="color:var(--secondary-accent)">></span> Waarom VIM?<br>
+                        <span style="font-size:0.7rem">02-01-2026</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CENTER: Main Terminal -->
+        <main class="panel terminal-container">
+            <div class="terminal-header">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+                <span class="title-bar-text">user@matthca: ~/portfolio</span>
+            </div>
+            <div class="terminal-output" id="output">
+                <!-- Welcome Message -->
+                <div class="output-line">
+                    <span class="info-text">Matthca OS [Version 3.1.4]</span><br>
+                    <span class="response-text">Welkom. Typ 'help' voor een lijst met commando's of gebruik de widgets aan de zijkant.</span>
+                    <br><br>
+                </div>
+            </div>
+            <div class="input-area">
+                <span class="prompt">user@matthca:~$</span>
+                <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
+            </div>
+        </main>
+
+        <!-- RECHTS: Projecten & Skills -->
+        <aside class="sidebar-right">
+            <div class="panel">
+                <div class="panel-header">
+                    <span>Systeem_Stats</span>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-name"><span>Python</span><span>90%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width:90%"></div></div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-name"><span>JavaScript / React</span><span>85%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width:85%"></div></div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-name"><span>Linux / Bash</span><span>95%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width:95%"></div></div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-name"><span>Cybersecurity</span><span>75%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width:75%"></div></div>
+                </div>
+
+                <div style="margin-top:20px; border-top:1px solid #333; paddingTop:10px;">
+                    <h3 style="font-size:0.9rem;">Cursussen</h3>
+                    <ul style="font-size:0.8rem; color:#aaa; margin-top:5px;">
+                        <li>> OSCP (In progress)</li>
+                        <li>> CCNA gecertificeerd</li>
+                        <li>> CS50 Harvard</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel" style="flex-grow: 1;">
+                <div class="panel-header">
+                    <span>Mappen/Projecten</span>
+                </div>
+
+                <div class="project-mini" onclick="runCommand('project c4s')">
+                    <h4>C4S-M Framework</h4>
+                    <span>Security automation tools</span>
+                </div>
+                <div class="project-mini" onclick="runCommand('project whoami')">
+                    <h4>WhoAmI</h4>
+                    <span>Persoonlijke portfolio site</span>
+                </div>
+                <div class="project-mini" onclick="runCommand('project bot')">
+                    <h4>Discord SecBot</h4>
+                    <span>Moderatie & logging bot</span>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+        <!-- FOOTER -->
+    <footer class="status-bar">
+        <div class="status-left">
+            <div class="status-item">
+                <div class="status-indicator"></div>
+                <span>SYSTEM ONLINE</span>
+            </div>
+            <div class="status-item">
+                <span>© 2026 MATTHCA</span>
+            </div>
+        </div>
+        <div class="status-right">
+            <div class="status-item">
+                <span>MEM: 64%</span>
+            </div>
+            <div class="status-item">
+                <div id="ai-indicator" class="status-ai-indicator"></div>
+                <span>AI USED: GEMINI</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const input = document.getElementById("cmd-input");
+        const output = document.getElementById("output");
+
+        // Command Database
+        const fileSystem = {
+            "about": "Ik ben Matthca, een gepassioneerde developer en security liefhebber. Ik bouw webapplicaties, automatiseer workflows en beveilig infrastructuren.",
+            "contact": "Email: hello@matthca.xyz\nPGP Key: 0xDEADBEEF...",
+            "socials": "GitHub: github.com/C4S-M\nLinkedIn: linkedin.com/in/matthca",
+            "skills": "Languages: Python, JS, C++, Go\nTools: Docker, Kubernetes, Burp Suite, Wireshark",
+        };
+
+        const projects = {
+            "c4s": "C4S-M Framework:\nEen modulaire toolkit voor security auditing.\nStatus: Active | Tech: Python, Bash",
+            "whoami": "WhoAmI Website:\nDeze website die je nu ziet. Gebouwd met HTML5, CSS Grid en Vanilla JS.\nStatus: Live",
+            "bot": "Discord SecBot:\nEen bot die phishing links detecteert en verwijdert.\nStatus: Maintenance"
+        };
+
+        const blogPosts = {
+            "1": "TITLE: Linux Hardening 101\nDATUM: 10-02-2026\n\nDe basis van elke server begint bij beveiliging. Schakel root login uit, gebruik SSH keys, en installeer fail2ban...",
+            "2": "TITLE: Waarom VIM?\nDATUM: 02-01-2026\n\nAls je eenmaal de sneltoetsen kent, wil je nooit meer terug naar VS Code (grapje, misschien wel). Maar op een headless server is VIM koning."
+        };
+
+        const services = {
+            "webdev": ">> Initializing WebDev module...\nIk bouw snelle, responsieve websites. Focus op clean code en SEO.",
+            "security": ">> Running Security Audit...\nIk check je webapp op OWASP Top 10 vulnerabilities.",
+            "automation": ">> Executing script...\nOf het nu gaat om data scraping of Excel rapportages, ik automatiseer het."
+        };
+
+        // Core Terminal Logic
+        input.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                const command = input.value.trim();
+                handleCommand(command);
+                input.value = "";
+            }
+        });
+
+        // Click outside focuses input
+        document.addEventListener('click', function(e) {
+            // Check if text is being selected, if so don't focus
+            if(window.getSelection().toString().length === 0) {
+                 input.focus();
+            }
+        });
+
+        // Exposed function for onclick events from sidebar
+        window.runCommand = function(cmd) {
+            input.value = cmd;
+            handleCommand(cmd);
+            input.focus();
+        }
+
+        function handleCommand(cmd) {
+            // Print command line
+            const cmdLine = document.createElement("div");
+            cmdLine.classList.add("output-line");
+            cmdLine.innerHTML = `<span class="prompt">user@matthca:~$</span> <span class="command-line">${cmd}</span>`;
+            output.appendChild(cmdLine);
+
+            // Process command
+            const parts = cmd.toLowerCase().split(" ");
+            const baseCmd = parts[0];
+            const arg = parts[1];
+
+            let response = "";
+            let type = "response-text";
+
+            switch(baseCmd) {
+                case "help":
+                    response = "Beschikbare commando's:\n  about     - Wie ben ik?\n  projects  - Bekijk mijn werk\n  skills    - Wat kan ik?\n  service   - [webdev|security|automation]\n  blog      - Lees artikelen\n  clear     - Terminal schoonmaken\n  contact   - Contactgegevens";
+                    type = "info-text";
+                    break;
+                case "clear":
+                    output.innerHTML = "";
+                    return; // No new line needed
+                case "whoami":
+                case "about":
+                    response = fileSystem["about"];
+                    break;
+                case "contact":
+                    response = fileSystem["contact"];
+                    break;
+                case "socials":
+                    response = fileSystem["socials"];
+                    break;
+                case "project":
+                case "projects":
+                    if(arg && projects[arg]) {
+                        response = projects[arg];
+                    } else {
+                        response = "Gebruik: project [naam]\nBeschikbare projecten:\n - c4s\n - whoami\n - bot\n\nOf klik rechts op een project.";
+                    }
+                    break;
+                case "service":
+                    if(arg && services[arg]) {
+                        response = services[arg];
+                    } else {
+                        response = "Gebruik: service [webdev|security|automation]";
+                    }
+                    break;
+                case "blog":
+                    if(arg === "read" && parts[2] && blogPosts[parts[2]]) {
+                        response = blogPosts[parts[2]];
+                    } else {
+                        response = "Blog Index:\n[1] Linux Hardening 101\n[2] Waarom VIM?\n\nType 'blog read [id]' om te lezen.";
+                    }
+                    break;
+                case "sudo":
+                    response = "user is not in the sudoers file. This incident will be reported.";
+                    type = "error-text";
+                    break;
+                default:
+                    if (baseCmd === "") break;
+                    response = `Command not found: ${baseCmd}. Type 'help' for available commands.`;
+                    type = "error-text";
+            }
+
+            if (response) {
+                // Typewriter effect logic could go here, but simple text is faster/cleaner for dashboard
+                const respDiv = document.createElement("div");
+                respDiv.classList.add("output-line", type);
+                respDiv.innerText = response;
+                output.appendChild(respDiv);
+            }
+
+            // Auto scroll to bottom
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Init: Animate skill bars on load
+        window.onload = function() {
+            input.focus();
+            const fills = document.querySelectorAll('.progress-fill');
+            fills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 500);
+            });
+        };
+    </script>
+</body>
+</html>
