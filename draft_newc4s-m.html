@@ -437,6 +437,10 @@
                         <span style="color:var(--secondary-accent)">></span> Waarom VIM?<br>
                         <span style="font-size:0.7rem">02-01-2026</span>
                     </div>
+                    <div class="cmd-trigger" onclick="runCommand('blog read 3')" style="cursor:pointer;">
+                        <span style="color:var(--secondary-accent)">></span> WSwitch to Linux!<br>
+                        <span style="font-size:0.7rem">21-09-2025</span>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -471,28 +475,33 @@
                 </div>
 
                 <div class="skill-bar">
-                    <div class="skill-name"><span>Python</span><span>90%</span></div>
-                    <div class="progress-bg"><div class="progress-fill" style="width:90%"></div></div>
+                    <div class="skill-name"><span>Python</span><span>80%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width:80%"></div></div>
                 </div>
                 <div class="skill-bar">
-                    <div class="skill-name"><span>JavaScript / React</span><span>85%</span></div>
+                    <div class="skill-name"><span>JavaScript</span><span>85%</span></div>
                     <div class="progress-bg"><div class="progress-fill" style="width:85%"></div></div>
                 </div>
                 <div class="skill-bar">
-                    <div class="skill-name"><span>Linux / Bash</span><span>95%</span></div>
-                    <div class="progress-bg"><div class="progress-fill" style="width:95%"></div></div>
+                    <div class="skill-name"><span>Linux / Bash</span><span>65%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width:65%"></div></div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-name"><span>SQL / Variaties</span><span>89%</span></div>
+                    <div class="progress-bg"><div class="progress-fill" style="width:89%"></div></div>
                 </div>
                 <div class="skill-bar">
                     <div class="skill-name"><span>Cybersecurity</span><span>75%</span></div>
                     <div class="progress-bg"><div class="progress-fill" style="width:75%"></div></div>
                 </div>
 
-                <div style="margin-top:20px; border-top:1px solid #333; paddingTop:10px;">
+                <div style="margin-top:20px; border-top:1px solid #333; padding-top:10px;">
                     <h3 style="font-size:0.9rem;">Cursussen</h3>
                     <ul style="font-size:0.8rem; color:#aaa; margin-top:5px;">
                         <li>> OSCP (In progress)</li>
-                        <li>> CCNA gecertificeerd</li>
+                        <li>> CCNA ongecertificeerd</li>
                         <li>> CS50 Harvard</li>
+                        <li>> BPA Systems, Services & Security</li>
                     </ul>
                 </div>
             </div>
@@ -510,10 +519,22 @@
                     <h4>WhoAmI</h4>
                     <span>Persoonlijke portfolio site</span>
                 </div>
+                <div class="project-mini" onclick="runCommand('project tip')">
+                    <h4>TIP</h4>
+                    <span>Threat Intelligence Platform</span>
+                </div>    
                 <div class="project-mini" onclick="runCommand('project bot')">
                     <h4>Discord SecBot</h4>
                     <span>Moderatie & logging bot</span>
                 </div>
+                <div class="project-mini" onclick="runCommand('project bazcraft')">
+                    <h4>BazCraft</h4>
+                    <span>Educatieve spelserver minecraft</span>
+                </div>
+                <div class="project-mini" onclick="runCommand('project autoserre')">
+                    <h4>AutoSerre</h4>
+                    <span>Automatisatie serre</span>
+                </div>                
             </div>
         </aside>
 
@@ -546,23 +567,25 @@
 
         // Command Database
         const fileSystem = {
-            "about": "Ik ben Matthca, een gepassioneerde developer en security liefhebber. Ik bouw webapplicaties, automatiseer workflows en beveilig infrastructuren.",
+            "about": "Ik ben Matthca, een gepassioneerde techneut en security liefhebber. Ik bouw vanalles, automatiseer workflows en beveilig infrastructuren.",
             "contact": "Email: hello@matthca.xyz\nPGP Key: 0xDEADBEEF...",
             "socials": "GitHub: github.com/C4S-M\nLinkedIn: linkedin.com/in/matthca",
-            "skills": "Languages: Python, JS, C++, Go\nTools: Docker, Kubernetes, Burp Suite, Wireshark",
+            "skills": "Languages: Python, JS, C, Java, HTML, CSS, SQL \nTools: Podman/Docker, Burp Suite, Wireshark, Proxmox, Defender"
         };
 
         const projects = {
             "c4s": "C4S-M Framework:\nEen modulaire toolkit voor security auditing.\nStatus: In queue | Tech: Python, Bash",
             "whoami": "WhoAmI Website:\nDeze website die je nu ziet. Gebouwd met HTML5, CSS Grid en Vanilla JS.\nStatus: Live",
-            "TIP":"Threat Intelligence Platform:\nEen platform dat threat intel verzameld van verschillende gecontrolleerde bronnen\nStatus: Live ",
+            "tip":"Threat Intelligence Platform:\nEen platform dat threat intel verzameld van verschillende gecontrolleerde bronnen\nStatus: Live ",
             "bot": "Discord SecBot:\nEen bot die phishing links detecteert en verwijdert.\nStatus: Maintenance",
-            "AutoSerre": "Automatische serre :\nDoor gebruik van een ESP32 en vocht\nStatus: Closed"
+            "bazcraft":"Educatieve spelserver minecraft :\nSamen met mijn medenstudenten in het 5de middelbaar ontwikkelde we een minecraftserver die leren leuker maakt <a href='https://www.radioreflex.be/2021/02/26/leerlingen-it-van-het-busleyden-atheneum-ontwikkelen-spelserver-bazcraft/'>BazCraft</a>\n Status: Closed",
+            "autoserre": "Automatische serre :\nDoor gebruik van een ESP32 en grondvochtigheidsensor de plant water geven(kleinschalig)\nStatus: Closed"
         };
 
         const blogPosts = {
             "1": "TITLE: Linux Hardening 101\nDATUM: 10-02-2026\n\nDe basis van elke server begint bij beveiliging. Schakel root login uit, gebruik SSH keys, en installeer fail2ban...",
-            "2": "TITLE: Waarom nano?\nDATUM: 02-01-2026\n\nte lui om VIM te gebruiken en nano is veel gebruiksvriendelijker naar mijn mening. Als je eenmaal de sneltoetsen kent, wil je nooit meer terug naar VS Code (grapje, misschien wel). Maar op een headless server is nano wel handig, sorry VIM experts."
+            "2": "TITLE: Waarom nano?\nDATUM: 02-01-2026\n\nte lui om VIM te gebruiken en nano is veel gebruiksvriendelijker naar mijn mening. Als je eenmaal de sneltoetsen kent, wil je nooit meer terug naar VS Code (grapje, misschien wel). Maar op een headless server is nano wel handig, sorry VIM experts.",
+            "3": "TITLE: Switch to Linux\nDATUM: 21-09-2025\n\nNa een corrupt Windows-systeem dacht ik dat het einde verhaal was voor mijn laptop. Na veel troubleshooting heb ik mijn bestanden gered met een externe bootdisk en besloten de sprong te wagen: Arch Linux met KDE Plasma.\nHet resultaat? Mijn laptop werkt beter dan ooit. Ik kan zelfs mijn games via Steam blijven spelen (behalve GTA online :/). Dit was oprecht een van de betere keuzes van mijn tech leven."
         };
 
         const services = {
@@ -633,8 +656,11 @@
                     if(arg && projects[arg]) {
                         response = projects[arg];
                     } else {
-                        response = "Gebruik: project [naam]\nBeschikbare projecten:\n - c4s\n - whoami\n - bot\n\nOf klik rechts op een project.";
+                        response = "Gebruik: project [naam]\nBeschikbare projecten:\n - c4s\n - whoami\n - tip\n - autoserre\n - bot\n - bazcraft\n\nOf klik rechts op een project.";
                     }
+                    break;
+                case "skills":
+                    response = fileSystem["skills"];
                     break;
                 case "service":
                     if(arg && services[arg]) {
@@ -647,7 +673,7 @@
                     if(arg === "read" && parts[2] && blogPosts[parts[2]]) {
                         response = blogPosts[parts[2]];
                     } else {
-                        response = "Blog Index:\n[1] Linux Hardening 101\n[2] Waarom VIM?\n\nType 'blog read [id]' om te lezen.";
+                        response = "Blog Index:\n[1] Linux Hardening 101\n[2] Waarom VIM?\n[3] Switch to Linux!\n\nType 'blog read [id]' om te lezen.";
                     }
                     break;
                 case "sudo":
